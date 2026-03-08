@@ -55,6 +55,18 @@ See `.env.example` for all required variables:
 - `AIRALO_CLIENT_ID` — Airalo OAuth2 client ID
 - `AIRALO_CLIENT_SECRET` — Airalo OAuth2 client secret
 - `JWT_SECRET` — Secret for `@fastify/jwt`
+- `DATABASE_PATH` _(optional)_ — Path to the SQLite database file (default: `./data/cellulo.db`)
+- `PACKAGE_SYNC_INTERVAL_MS` _(optional)_ — How often the background sync fetches packages from Airalo in milliseconds (default: `21600000` = 6 hours)
+
+---
+
+## Background Package Sync
+
+On startup the BFF immediately fetches all packages from Airalo (paginating through every page) and upserts them into a local SQLite database (`./data/cellulo.db` by default). The sync then repeats on a configurable interval (default: every 6 hours).
+
+This ensures packages are always available and up to date without putting real-time load on the Airalo API.
+
+The database file is created automatically. The `data/` directory is excluded from version control.
 
 ---
 
@@ -73,3 +85,5 @@ See `.env.example` for all required variables:
 - **Routes** (`src/routes/`) delegate to the service layer — no direct Airalo calls from route handlers.
 - **Plugins** (`src/plugins/`) register `@fastify/cors`, `@fastify/jwt`, and `@fastify/rate-limit`.
 - **Config** (`src/config/env.ts`) validates all environment variables at startup using `zod`.
+- **Database** (`src/db/database.ts`) initialises a SQLite database via `better-sqlite3` with WAL mode enabled for concurrent reads.
+- **Jobs** (`src/jobs/packageSync.ts`) runs a background timer that periodically fetches all Airalo packages (paginated) and upserts them into SQLite.

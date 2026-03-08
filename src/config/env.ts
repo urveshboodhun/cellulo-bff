@@ -9,6 +9,10 @@ const envSchema = z.object({
   AIRALO_CLIENT_SECRET: z.string().min(1),
   JWT_SECRET: z.string().min(1),
   CORS_ORIGIN: z.string().optional(),
+  /** Path to the SQLite database file. Defaults to ./data/cellulo.db */
+  DATABASE_PATH: z.string().optional(),
+  /** How often (in milliseconds) to refresh packages from Airalo. Defaults to 6 hours. */
+  PACKAGE_SYNC_INTERVAL_MS: z.coerce.number().positive().default(6 * 60 * 60 * 1000),
 });
 
 const parsed = envSchema.safeParse(process.env);

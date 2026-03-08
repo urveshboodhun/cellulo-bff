@@ -1,12 +1,15 @@
 import { env } from '../../config/env';
 import { getAiraloToken } from './auth';
 
-export async function getPackages(countryCode?: string): Promise<unknown> {
+export async function getPackages(countryCode?: string, page?: number): Promise<unknown> {
   const token = await getAiraloToken();
 
   const url = new URL(`${env.AIRALO_BASE_URL}/packages`);
   if (countryCode) {
     url.searchParams.set('country', countryCode);
+  }
+  if (page && page > 1) {
+    url.searchParams.set('page', String(page));
   }
 
   const response = await fetch(url.toString(), {
