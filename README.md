@@ -36,7 +36,8 @@ All routes are prefixed with `/api/v1`.
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/v1/health` | Health check |
-| `GET` | `/api/v1/packages` | List eSIM packages (optional `?country=XX`) |
+| `GET` | `/api/v1/packages` | List all eSIM packages (optional `?country=XX`) |
+| `GET` | `/api/v1/packages/:countryCode` | List eSIM packages for a specific country |
 | `GET` | `/api/v1/orders` | List orders |
 | `POST` | `/api/v1/orders` | Create a new order |
 | `GET` | `/api/v1/esims` | List eSIMs |
